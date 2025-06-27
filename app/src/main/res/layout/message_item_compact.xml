@@ -39,7 +39,7 @@
         tools:src="@drawable/gotify"
         android:contentDescription="@string/message_image_desc"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView

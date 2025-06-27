@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3867d6</color>
-    <color name="colorNavPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#3867d6</color>
-    <color name="colorAccent">#1c49b4</color>
-    <color name="icons">#797979</color>
-    <color name="swipeBackground">#E74C3C</color>
+    <!-- 主色调修改为深蓝色 -->
+    <color name="colorPrimary">#1A237E</color>
+    <!-- 导航栏主色调修改为黑色 -->
+    <color name="colorNavPrimary">#000000</color>
+    <!-- 主色调的深色变体修改为更深的蓝色 -->
+    <color name="colorPrimaryDark">#0D1346</color>
+    <!-- 强调色修改为紫色 -->
+    <color name="colorAccent">#5E35B1</color>
+    <!-- 图标颜色修改为浅灰色 -->
+    <color name="icons">#BDBDBD</color>
+    <!-- 滑动操作背景颜色修改为深红色 -->
+    <color name="swipeBackground">#B71C1C</color>
+    <!-- 滑动操作图标颜色保持白色 -->
     <color name="swipeIcon">#FFFFFF</color>
-    <color name="hyperLink">#FF7F50</color>
+    <!-- 超链接文本颜色修改为橙色 -->
+    <color name="hyperLink">#FFA726</color>
 </resources>
