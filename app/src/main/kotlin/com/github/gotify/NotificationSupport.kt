@@ -22,7 +22,8 @@ internal object NotificationSupport {
             context.getString(R.string.notification_channel_title_foreground),
             NotificationManager.IMPORTANCE_LOW
         ).apply {
-            setShowBadge(false)
+            // 修改为启用角标显示
+            setShowBadge(true)
         }
         notificationManager.createNotificationChannel(foreground)
     }
@@ -57,13 +58,17 @@ internal object NotificationSupport {
                 Channel.MESSAGES_IMPORTANCE_MIN,
                 context.getString(R.string.notification_channel_title_min),
                 NotificationManager.IMPORTANCE_MIN
-            )
+            ).apply {
+                setShowBadge(true)
+            }
 
             val messagesImportanceLow = NotificationChannel(
                 Channel.MESSAGES_IMPORTANCE_LOW,
                 context.getString(R.string.notification_channel_title_low),
                 NotificationManager.IMPORTANCE_LOW
-            )
+            ).apply {
+                setShowBadge(true)
+            }
 
             val messagesImportanceDefault = NotificationChannel(
                 Channel.MESSAGES_IMPORTANCE_DEFAULT,
@@ -73,6 +78,7 @@ internal object NotificationSupport {
                 enableLights(true)
                 lightColor = Color.CYAN
                 enableVibration(true)
+                setShowBadge(true)
             }
 
             val messagesImportanceHigh = NotificationChannel(
@@ -83,6 +89,7 @@ internal object NotificationSupport {
                 enableLights(true)
                 lightColor = Color.CYAN
                 enableVibration(true)
+                setShowBadge(true)
             }
 
             notificationManager.createNotificationChannel(messagesImportanceMin)
@@ -124,6 +131,7 @@ internal object NotificationSupport {
                 NotificationManager.IMPORTANCE_MIN
             ).apply {
                 group = groupId
+                setShowBadge(true)
             }
 
             val messagesImportanceLow = NotificationChannel(
@@ -132,6 +140,7 @@ internal object NotificationSupport {
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
                 group = groupId
+                setShowBadge(true)
             }
 
             val messagesImportanceDefault = NotificationChannel(
@@ -143,6 +152,7 @@ internal object NotificationSupport {
                 lightColor = Color.CYAN
                 enableVibration(true)
                 group = groupId
+                setShowBadge(true)
             }
 
             val messagesImportanceHigh = NotificationChannel(
@@ -154,6 +164,7 @@ internal object NotificationSupport {
                 lightColor = Color.CYAN
                 enableVibration(true)
                 group = groupId
+                setShowBadge(true)
             }
 
             notificationManager.createNotificationChannel(messagesImportanceMin)
