@@ -100,6 +100,11 @@
     <string name="setting_key_intent_dialog_permission">intent_dialog_permission</string>
     <string name="setting_summary_intent_dialog_permission">要始终显示传入的意图 URL，请授予此应用在其他应用之上显示的权限。</string>
     <string name="setting_summary_intent_dialog_permission_granted">权限已授予。</string>
+    
+    <!-- Intent设置相关字符串 -->
+    <string name="setting_key_prompt_onreceive_intent">prompt_onreceive_intent</string>
+    <string name="setting_prompt_onreceive_intent">收到意图URL时显示提示</string>
+    <string name="setting_summary_prompt_onreceive_intent">当收到带有意图URL的消息时，显示一个对话框询问是否要打开它。</string>
     <string name="push_message">推送消息</string>
     <string name="appListDescription">应用：</string>
     <string name="priorityDescription">优先级：</string>
