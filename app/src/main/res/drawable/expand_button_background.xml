@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 正常模式下的背景色 - 使用半透明黑色 -->
+    <item android:state_enabled="true" android:drawable="@color/expand_button_light_background" />
+    
+    <!-- 禁用状态下的背景色 - 稍微透明一些的黑色 -->
+    <item android:state_enabled="false" android:drawable="@color/expand_button_disabled_background" />
+</selector>

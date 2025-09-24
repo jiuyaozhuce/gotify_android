@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.format.DateUtils
+import android.text.TextUtils
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.button.MaterialButton
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -73,13 +75,20 @@ internal class ListMessageAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val message = currentList[position]
-        if (Extras.useMarkdown(message.message)) {
+        val isMarkdown = Extras.useMarkdown(message.message)
+        
+        if (isMarkdown) {
             holder.message.autoLinkMask = 0
             markwon.setMarkdown(holder.message, message.message.message)
         } else {
             holder.message.autoLinkMask = Linkify.WEB_URLS
             holder.message.text = message.message.message
         }
+        
+        // 设置消息可展开/折叠功能，最近一条消息（position=0）不受折叠限制
+        val isRecentMessage = position == 0
+        holder.setupExpandableText(message.message.message, isMarkdown, isRecentMessage)
+        
         holder.title.text = message.message.title
         if (message.image != null) {
             val url = Utils.resolveAbsoluteUrl("${settings.url}/", message.image)
@@ -117,9 +126,79 @@ internal class ListMessageAdapter(
         lateinit var title: TextView
         lateinit var date: TextView
         lateinit var delete: ImageButton
+        lateinit var expandButton: MaterialButton
 
         private var relativeTimeFormat = true
         private lateinit var dateTime: OffsetDateTime
+        private var isExpanded = false
+        private var fullText: String? = null
+        // 与左侧频道图标高度一致 (120dp)
+        private val MAX_HEIGHT_COLLAPSED = dpToPx(300)
+        
+        private fun dpToPx(dp: Int): Int {
+            val density = itemView.resources.displayMetrics.density
+            return Math.round(dp * density)
+        }
+        
+        fun setupExpandableText(text: String, isMarkdown: Boolean, isRecentMessage: Boolean) {
+            fullText = text
+            message.maxLines = Integer.MAX_VALUE
+            message.post {
+                val measuredHeight = message.measuredHeight
+                val containsImage = containsImage(text, isMarkdown)
+                
+                // 最近一条消息不受折叠限制
+                if (isRecentMessage) {
+                    message.maxHeight = Integer.MAX_VALUE
+                    message.ellipsize = null
+                    expandButton.visibility = View.GONE
+                    isExpanded = true
+                } else if (measuredHeight > MAX_HEIGHT_COLLAPSED || containsImage) {
+                    // 设置最大高度而不是最大行数
+                    message.maxHeight = MAX_HEIGHT_COLLAPSED
+                    message.ellipsize = TextUtils.TruncateAt.END
+                    expandButton.visibility = View.VISIBLE
+                    expandButton.text = itemView.context.getString(R.string.expand_message)
+                    isExpanded = false
+                } else {
+                    expandButton.visibility = View.GONE
+                }
+            }
+            
+            expandButton.setOnClickListener {
+                toggleExpandState()
+            }
+        }
+        
+        /**
+         * 检测消息内容中是否包含图片
+         * @param text 消息文本内容
+         * @param isMarkdown 是否为Markdown格式
+         * @return 是否包含图片
+         */
+        private fun containsImage(text: String, isMarkdown: Boolean): Boolean {
+            if (!isMarkdown) {
+                return false
+            }
+            
+            // 检查Markdown格式的图片标签 ![alt](url)
+            val markdownImagePattern = Regex("""!\[.*?\]\(.*?\)""")
+            return markdownImagePattern.containsMatchIn(text)
+        }
+        
+        private fun toggleExpandState() {
+            isExpanded = !isExpanded
+            
+            if (isExpanded) {
+                message.maxHeight = Integer.MAX_VALUE
+                message.ellipsize = null
+                expandButton.text = itemView.context.getString(R.string.collapse_message)
+            } else {
+                message.maxHeight = MAX_HEIGHT_COLLAPSED
+                message.ellipsize = TextUtils.TruncateAt.END
+                expandButton.text = itemView.context.getString(R.string.expand_message)
+            }
+        }
 
         init {
             enableCopyToClipboard()
@@ -129,12 +208,14 @@ internal class ListMessageAdapter(
                 title = binding.messageTitle
                 date = binding.messageDate
                 delete = binding.messageDelete
+                expandButton = binding.messageExpandButton
             } else if (binding is MessageItemCompactBinding) {
                 image = binding.messageImage
                 message = binding.messageText
                 title = binding.messageTitle
                 date = binding.messageDate
                 delete = binding.messageDelete
+                expandButton = binding.messageExpandButton
             }
         }
 

@@ -50,10 +50,30 @@
         android:layout_marginEnd="8dp"
         android:textColorLink="@color/hyperLink"
         android:textIsSelectable="true"
+        android:maxHeight="120dp"
         tools:text="The message text."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/message_image"
         app:layout_constraintTop_toBottomOf="@+id/message_title" />
+
+    <!-- 展开按钮 - 位于消息底部右侧，根据主题显示不同背景 -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/message_expand_button"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/expand_button_background"
+        android:text="@string/expand_message"
+        android:textColor="@color/swipeIcon"
+        android:elevation="2dp"
+        android:visibility="gone"
+        android:includeFontPadding="false"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        app:cornerRadius="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageButton
         android:id="@+id/message_delete"

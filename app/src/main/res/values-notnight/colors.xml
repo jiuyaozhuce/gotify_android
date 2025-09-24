@@ -8,4 +8,8 @@
     <color name="swipeBackground">#E74C3C</color>
     <color name="swipeIcon">#FFFFFF</color>
     <color name="hyperLink">#FF7F50</color>
+    
+    <!-- 展开按钮颜色定义 - Light主题 -->
+    <color name="expand_button_light_background">#80000000</color> <!-- 半透明黑色 -->
+    <color name="expand_button_disabled_background">#60000000</color> <!-- 更透明的黑色 -->
 </resources>
