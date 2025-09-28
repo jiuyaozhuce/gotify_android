@@ -146,6 +146,7 @@ internal class ListMessageAdapter(
             message.post {
                 val measuredHeight = message.measuredHeight
                 val containsImage = containsImage(text, isMarkdown)
+                val hasLargeImage = containsImage && isImageHeightExceedsLimit()
                 
                 // 最近一条消息不受折叠限制
                 if (isRecentMessage) {
@@ -153,7 +154,7 @@ internal class ListMessageAdapter(
                     message.ellipsize = null
                     expandButton.visibility = View.GONE
                     isExpanded = true
-                } else if (measuredHeight > MAX_HEIGHT_COLLAPSED || containsImage) {
+                } else if (measuredHeight > MAX_HEIGHT_COLLAPSED || hasLargeImage) {
                     // 设置最大高度而不是最大行数
                     message.maxHeight = MAX_HEIGHT_COLLAPSED
                     message.ellipsize = TextUtils.TruncateAt.END
@@ -168,6 +169,22 @@ internal class ListMessageAdapter(
             expandButton.setOnClickListener {
                 toggleExpandState()
             }
+        }
+        
+        /**
+         * 检查图片高度是否超过限制
+         * @return 图片高度是否超过300dp
+         */
+        private fun isImageHeightExceedsLimit(): Boolean {
+            // 检查图片视图是否已加载（由于image是lateinit变量，不需要检查null）
+            if (image.height > 0) {
+                // 直接在像素级别进行比较，因为MAX_HEIGHT_COLLAPSED已经是像素值
+                return image.height > MAX_HEIGHT_COLLAPSED
+            }
+            
+            // 如果图片还未加载完成，默认返回false
+            // 图片加载完成后会通过其他机制触发重新布局
+            return false
         }
         
         /**
