@@ -3,7 +3,7 @@ import java.io.File
 import java.net.URI
 
 plugins {
-    id("com.android.application") version "8.11.0" apply false
+    id("com.android.application") version "8.10.1" apply false
     id("org.jetbrains.kotlin.android") version "2.2.0" apply false
     id("org.hidetake.swagger.generator") version "2.19.2"
 }

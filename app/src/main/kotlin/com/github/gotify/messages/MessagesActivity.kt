@@ -37,6 +37,7 @@ import com.github.gotify.CoilInstance
 import com.github.gotify.MissedMessageUtil
 import com.github.gotify.R
 import com.github.gotify.Utils
+import com.github.gotify.badge.BadgeManager
 import com.github.gotify.Utils.launchCoroutine
 import com.github.gotify.api.Api
 import com.github.gotify.api.ApiException
@@ -74,6 +75,7 @@ internal class MessagesActivity :
     private var updateAppOnDrawerClose: Long? = null
     private lateinit var listMessageAdapter: ListMessageAdapter
     private lateinit var onBackPressedCallback: OnBackPressedCallback
+    private lateinit var badgeManager: BadgeManager
 
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -93,6 +95,7 @@ internal class MessagesActivity :
         binding = ActivityMessagesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this, MessagesModelFactory(this))[MessagesModel::class.java]
+        badgeManager = BadgeManager(this)
         Logger.info("Entering " + javaClass.simpleName)
         initDrawer()
 
@@ -314,6 +317,8 @@ internal class MessagesActivity :
         val context = applicationContext
         val nManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         nManager.cancelAll()
+        // 清除应用角标
+        badgeManager.clearUnreadCount()
         val filter = IntentFilter()
         filter.addAction(WebSocketService.NEW_MESSAGE_BROADCAST)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

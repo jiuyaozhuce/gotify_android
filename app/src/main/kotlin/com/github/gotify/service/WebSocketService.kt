@@ -27,6 +27,7 @@ import com.github.gotify.R
 import com.github.gotify.Settings
 import com.github.gotify.Utils
 import com.github.gotify.api.Callback
+import com.github.gotify.badge.BadgeManager
 import com.github.gotify.api.ClientFactory
 import com.github.gotify.client.api.ApplicationApi
 import com.github.gotify.client.api.MessageApi
@@ -50,6 +51,7 @@ internal class WebSocketService : Service() {
     }
 
     private lateinit var settings: Settings
+    private lateinit var badgeManager: BadgeManager
     private var connection: WebSocketConnection? = null
     private val networkCallback: ConnectivityManager.NetworkCallback =
         object : ConnectivityManager.NetworkCallback() {
@@ -75,6 +77,7 @@ internal class WebSocketService : Service() {
     override fun onCreate() {
         super.onCreate()
         settings = Settings(this)
+        badgeManager = BadgeManager(this)
         val client = ClientFactory.clientToken(settings)
         missingMessageUtil = MissedMessageUtil(client.createService(MessageApi::class.java))
         Logger.info("Create ${javaClass.simpleName}")
@@ -224,6 +227,8 @@ internal class WebSocketService : Service() {
             broadcast(message)
         }
         val size = messages.size
+        // 增加未读消息计数
+        badgeManager.incrementUnreadCount(size)
         showNotification(
             NotificationSupport.ID.GROUPED,
             getString(R.string.missed_messages),
@@ -238,6 +243,8 @@ internal class WebSocketService : Service() {
             lastReceivedMessage.set(message.id)
         }
         broadcast(message)
+        // 增加未读消息计数
+        badgeManager.incrementUnreadCount()
         showNotification(
             message.id,
             message.title,
